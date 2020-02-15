@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	"github.com/eminetto/pos-web-go/core/beer"
-	"github.com/eminetto/pos-web-go/core/errors"
+	"github.com/giovannibussola/trabalho-pos-golang/core/beer"
+	"github.com/giovannibussola/trabalho-pos-golang/core/errors"
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"net/http"

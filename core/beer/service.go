@@ -3,13 +3,14 @@ package beer
 import (
 	"database/sql"
 	"fmt"
+	"math/rand"
 )
 
 //vamos agora usar o banco de dados SQLite
 //para isso precisamos primeiro inicializar no nosso projeto o sistema de importação de módulos
 //executando o comando:
-// go mod init github.com/eminetto/pos-web-go
-//sendo o github.com/eminetto/pos-web-go o nome completo do projeto. É recomendado usar esta nomenclatura
+// go mod init github.com/giovannibussola/trabalho-pos-golang
+//sendo o github.com/giovannibussola/trabalho-pos-golang o nome completo do projeto. É recomendado usar esta nomenclatura
 //para evitar conflitos de pacotes em projetos maiores
 //o próximo passo é importar o pacote do SQLite com o comando:
 // go get github.com/mattn/go-sqlite3
@@ -84,6 +85,9 @@ func (s *Service) Get(ID int64) (*Beer, error) {
 	return &b, nil
 }
 func (s *Service) Store(b *Beer) error {
+	if b.ID == 0 {
+		b.ID = int64(rand.Int())
+	}
 	//iniciamos uma transação
 	tx, err := s.DB.Begin()
 	if err != nil {

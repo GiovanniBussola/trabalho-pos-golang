@@ -3,8 +3,8 @@ package main
 import (
 	"database/sql"
 	"github.com/codegangsta/negroni"
-	"github.com/eminetto/pos-web-go/core/beer"
-	"github.com/eminetto/pos-web-go/web/handlers"
+	"github.com/giovannibussola/trabalho-pos-golang/core/beer"
+	"github.com/giovannibussola/trabalho-pos-golang/web/handlers"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"log"

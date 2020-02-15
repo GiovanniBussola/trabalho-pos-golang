@@ -3,9 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	"github.com/codegangsta/negroni"
-	"github.com/eminetto/pos-web-go/core/beer"
-	"github.com/eminetto/pos-web-go/core/errors"
-	"github.com/eminetto/pos-web-go/core/middlewares"
+	"github.com/giovannibussola/trabalho-pos-golang/core/beer"
+	"github.com/giovannibussola/trabalho-pos-golang/core/errors"
+	"github.com/giovannibussola/trabalho-pos-golang/core/middlewares"
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"html/template"
@@ -154,7 +154,7 @@ curl -X "POST" "http://localhost:4000/v1/beer" \
 func storeBeer(service beer.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		b := context.Get(r, "beer").(beer.Beer)
-		
+
 		err := service.Store(&b)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
