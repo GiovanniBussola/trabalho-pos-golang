@@ -92,15 +92,15 @@ func getAllBeerJSON(w http.ResponseWriter, service beer.UseCase) {
 	w.Header().Set("Content-Type", "application/json")
 	all, err := service.GetAll()
 	if err != nil {
-		w.Write(formatJSONError(err.Error()))
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(formatJSONError(err.Error(), "Ocorreu um erro ao buscar cervejas!"))
 		return
 	}
 	//vamos converter o resultado em JSON e gerar a resposta
 	err = json.NewEncoder(w).Encode(all)
 	if err != nil {
-		w.Write(formatJSONError("Erro convertendo em JSON"))
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(formatJSONError(err.Error(), "Erro convertendo em JSON"))
 		return
 	}
 }
@@ -118,21 +118,21 @@ func getBeer(service beer.UseCase) http.Handler {
 		vars := mux.Vars(r)
 		id, err := strconv.ParseInt(vars["id"], 10, 64)
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
 			w.WriteHeader(http.StatusBadRequest)
+			w.Write(formatJSONError(err.Error(), "Parametro id da requisição está inválido!"))
 			return
 		}
 		b, err := service.Get(id)
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
 			w.WriteHeader(http.StatusNotFound)
+			w.Write(formatJSONError(err.Error(), "Cerveja não encontrada!"))
 			return
 		}
 		//vamos converter o resultado em JSON e gerar a resposta
 		err = json.NewEncoder(w).Encode(b)
 		if err != nil {
-			w.Write(formatJSONError("Erro convertendo em JSON"))
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(formatJSONError(err.Error(), "Erro convertendo em JSON"))
 			return
 		}
 	})
@@ -156,15 +156,15 @@ func storeBeer(service beer.UseCase) http.Handler {
 		b.ID = 10
 		err := json.NewDecoder(r.Body).Decode(&b)
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
 			w.WriteHeader(http.StatusBadRequest)
+			w.Write(formatJSONError(err.Error(), "Parametros do corpo da requisição inválidos!"))
 			return
 		}
 		//@TODO precisamos validar os dados antes de salvar na base de dados. Pergunta: Como fazer isso?
 		err = service.Store(&b)
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
 			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(formatJSONError(err.Error(), "Ocorreu um erro ao salvar registro!"))
 			return
 		}
 		w.WriteHeader(http.StatusCreated)
@@ -191,14 +191,14 @@ func updateBeer(service beer.UseCase) http.Handler {
 		b.ID = id
 
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
+			w.Write(formatJSONError(err.Error(), "Parametro id incorreto na requisição"))
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		_, err = service.Get(id)
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
+			w.Write(formatJSONError(err.Error(), "Cerveja não encontrada!"))
 			w.WriteHeader(http.StatusNotFound)
 			return
 		}
@@ -206,14 +206,14 @@ func updateBeer(service beer.UseCase) http.Handler {
 		err = json.NewDecoder(r.Body).Decode(&b)
 
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
+			w.Write(formatJSONError(err.Error(), "Parametros da requisição incorretos!"))
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 		//@TODO precisamos validar os dados antes de salvar na base de dados. Pergunta: Como fazer isso?
 		err = service.Update(&b)
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
+			w.Write(formatJSONError(err.Error(), "Erro ao atualizar registro!"))
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -233,21 +233,21 @@ func removeBeer(service beer.UseCase) http.Handler {
 		id, err := strconv.ParseInt(vars["id"], 10, 64)
 
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
+			w.Write(formatJSONError(err.Error(), "Parametro id incorreto na requisição"))
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		_, err = service.Get(id)
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
 			w.WriteHeader(http.StatusNotFound)
+			w.Write(formatJSONError(err.Error(), "Registro não encontrado!"))
 			return
 		}
 
 		err = service.Remove(id)
 		if err != nil {
-			w.Write(formatJSONError(err.Error()))
+			w.Write(formatJSONError(err.Error(), "Erro ao remover registro!"))
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
