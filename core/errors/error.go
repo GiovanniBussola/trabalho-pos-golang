@@ -1,11 +1,11 @@
-package handlers
+package errors
 
 import "encoding/json"
 
 //esta função gera um erro no formato esperado
 //pelo http.ResponseWriter e em um formato
 //json
-func formatJSONError(internalmessage string, message string) []byte {
+func FormatJSONError(internalmessage string, message string) []byte {
 	appError := struct {
 		Message string `json:"message"`
 		InternalMessage string `json:"internalmessage"`
